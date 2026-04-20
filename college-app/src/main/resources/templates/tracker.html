@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tracker</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            color: white;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        }
+
+        .card-box {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .card-box:hover {
+            transform: scale(1.05);
+        }
+
+        .welcome {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        /* 🔥 TRACKER CARD */
+.tracker-card {
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    transition: 0.4s;
+    text-align: center;
+}
+
+/* COLOR STATES */
+.low {
+    border: 2px solid white;
+    box-shadow: 0 0 10px white;
+}
+
+.avg {
+    border: 2px solid yellow;
+    box-shadow: 0 0 15px yellow;
+}
+
+.good {
+    border: 2px solid lime;
+    box-shadow: 0 0 20px lime;
+}
+
+.pro {
+    border: 2px solid cyan;
+    box-shadow: 0 0 25px cyan, 0 0 50px blue;
+}
+
+/* LEGEND */
+.legend-box {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+/* DOTS */
+.dot {
+    height: 12px;
+    width: 12px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.low-dot { background: white; }
+.avg-dot { background: yellow; }
+.good-dot { background: lime; }
+.pro-dot { background: cyan; }
+/* 🔥 PERFECT ALIGNMENT */
+.row.mb-5 > div {
+    min-height: 200px;
+}
+
+/* Center content vertically */
+.d-flex {
+    display: flex !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+/* Make tracker bigger */
+.tracker-card h1 {
+    font-size: 48px;
+}
+
+/* Better spacing */
+.legend-box p {
+    margin-bottom: 10px;
+}
+    </style>
+    
+    
+    
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div th:replace="fragments/navbar :: body"></div>
+
+<div class="container mt-5">
+
+    <!-- 🔥 USERNAME -->
+    <div class="welcome mb-4">
+        WELCOME <span th:text="${#strings.toUpperCase(username)}"></span>!
+    </div>
+
+    <!-- 🔥 STATS -->
+    <div class="row text-center">
+
+        <div class="col-md-3">
+            <div class="card-box">
+                <h5>Tracker Score</h5>
+                <h2 th:text="${#numbers.formatDecimal(trackerScore,1,2)}"></h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-box">
+                <h5>Attendance</h5>
+                <h2 th:text="${#numbers.formatDecimal(attendancePercent,1,2) + '%'}"></h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-box">
+                <h5>Marks</h5>
+                <h2 th:text="${#numbers.formatDecimal(marksPercent,1,2) + '%'}"></h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-box">
+                <h5>Status</h5>
+                <h2>Active</h2>
+            </div>
+        </div>
+
+    </div>
+    <!-- 🔥 TRACKER METRIC + LEGEND -->
+<div class="row mb-5">
+
+    <!-- LEFT -->
+    <div class="col-md-7 d-flex align-items-center">
+
+        <div class="tracker-card w-100"
+             th:classappend="
+                ${trackerScore < 40} ? 'low' :
+                (${trackerScore < 70} ? 'avg' :
+                (${trackerScore < 85} ? 'good' : 'pro'))
+             ">
+
+            <h5>Tracker Score</h5>
+            <h1 th:text="${#numbers.formatDecimal(trackerScore,1,2)}"></h1>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-md-5 d-flex align-items-start mt-4">
+
+        <div class="legend-box w-100">
+
+            <h5 class="mb-3">Score Meaning</h5>
+
+            <p><span class="dot low-dot"></span> Below Average (0–40)</p>
+            <p><span class="dot avg-dot"></span> Average (40–70)</p>
+            <p><span class="dot good-dot"></span> Above Average (70–85)</p>
+            <p><span class="dot pro-dot"></span> Exceptional (85+)</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

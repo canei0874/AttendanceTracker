@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<h2 th:text="${#numbers.formatDecimal(trackerScore, 1, 2)}"></h2>
+<head>
+    <title>Marks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div th:replace="fragments/navbar :: body"></div>
+
+<div class="container mt-5">
+
+    <h2>Marks</h2>
+
+    <!-- ADD MARKS -->
+    <form action="/add-marks" method="post" class="row g-2 mb-4">
+        <div class="col">
+            <input class="form-control" name="subjectName" placeholder="Subject">
+        </div>
+        <div class="col">
+            <input class="form-control" name="marksObtained" type="number" placeholder="Marks">
+        </div>
+        <div class="col">
+            <input class="form-control" name="totalMarks" type="number" placeholder="Total">
+        </div>
+        <div class="col">
+            <button class="btn btn-primary w-100">Add</button>
+        </div>
+    </form>
+
+    <!-- TABLE -->
+    <table class="table table-dark">
+        <tr>
+            <th>Subject</th>
+            <th>Marks</th>
+            <th>Total</th>
+            <th>%</th>
+        </tr>
+
+        <tr th:each="m : ${marksList}">
+            <td th:text="${m.subjectName}"></td>
+            <td th:text="${m.marksObtained}"></td>
+            <td th:text="${m.totalMarks}"></td>
+            <td th:text="${(m.marksObtained * 100) / m.totalMarks + '%'}"></td>
+        </tr>
+    </table>
+
+</div>
+
+</body>
+</html>
