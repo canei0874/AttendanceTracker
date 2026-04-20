@@ -25,11 +25,21 @@ public class SecurityConfig {
             )
 
             .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login") // 🔥 important
-                .defaultSuccessUrl("/dashboard", true)
-                .permitAll()
-            )
+            	    .loginPage("/login")
+            	    .failureUrl("/login?error=true") // 🔥 ADD THIS
+            	    .successHandler((request, response, authentication) -> {
+
+            	        String role = authentication.getAuthorities().iterator().next().getAuthority();
+
+            	        if (role.equals("ROLE_ADMIN")) {
+            	            response.sendRedirect("/admin");
+            	        } else {
+            	            response.sendRedirect("/tracker");
+            	        }
+
+            	    })
+            	    .permitAll()
+            	)
 
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")

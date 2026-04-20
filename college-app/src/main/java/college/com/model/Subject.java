@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "subject")
 public class Subject {
 
     @Id
@@ -11,19 +12,21 @@ public class Subject {
     private Long id;
 
     private String name;
+
     private int totalClasses;
+
     private int attendedClasses;
 
-    // 🔥 Relation with Attendance (FIXED)
+    // 🔥 Subject → Attendance (cascade delete)
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attendance> attendanceList;
 
-    // 🔥 Relation with User
+    // 🔥 Subject → User (MANDATORY relation)
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // ✅ GETTERS & SETTERS
+    // ================= GETTERS & SETTERS =================
 
     public Long getId() {
         return id;

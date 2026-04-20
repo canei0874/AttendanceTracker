@@ -1,44 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Admin Panel</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+        }
+
+        .card-box {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        table {
+            background: rgba(255,255,255,0.1);
+        }
+
+        th, td {
+            color: white;
+        }
+
+        .btn-danger {
+            transition: 0.3s;
+        }
+
+        .btn-danger:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
+
 <body>
+<div class="text-center mt-4">
+    <form action="/logout" method="post">
+        <button class="btn btn-danger px-4 py-2">
+            Logout
+        </button>
+    </form>
+</div>
 
 <div class="container mt-5">
 
-    <h2>Admin Panel</h2>
+    <h2 class="mb-4">⚙️ Admin Panel</h2>
 
-    <h4>Users</h4>
-    <table class="table table-bordered">
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Role</th>
-        </tr>
+    <!-- USERS -->
+    <div class="card-box">
+        <h4>Users</h4>
 
-        <tr th:each="u : ${users}">
-            <td th:text="${u.id}"></td>
-            <td th:text="${u.username}"></td>
-            <td th:text="${u.role}"></td>
-        </tr>
-    </table>
+        <table class="table table-dark table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
 
-    <h4 class="mt-5">Attendance</h4>
-    <table class="table table-bordered">
-        <tr>
-            <th>User</th>
-            <th>Date</th>
-            <th>Status</th>
-        </tr>
+            <tr th:each="u : ${users}">
+                <td th:text="${u.id}"></td>
+                <td th:text="${u.username}"></td>
+                <td th:text="${u.role}"></td>
 
-        <tr th:each="a : ${attendance}">
-            <td th:text="${a.user.username}"></td>
-            <td th:text="${a.date}"></td>
-            <td th:text="${a.status}"></td>
-        </tr>
-    </table>
+                <td>
+                    <form action="/admin/delete-user" method="post">
+                        <input type="hidden" name="userId" th:value="${u.id}">
+                        <button class="btn btn-danger btn-sm"
+                                onclick="return confirm('Delete this user?')">
+                            🗑 Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div class="card-box">
+        <h4>Attendance</h4>
+
+        <table class="table table-dark table-hover">
+            <tr>
+                <th>User</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+
+            <tr th:each="a : ${attendance}">
+                
+                <!-- 🔥 FIXED NULL ISSUE -->
+                <td th:text="${a.user != null ? a.user.username : 'N/A'}"></td>
+
+                <td th:text="${a.date}"></td>
+                <td th:text="${a.status}"></td>
+            </tr>
+        </table>
+    </div>
 
 </div>
 

@@ -1,6 +1,7 @@
 package college.com.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -14,7 +15,11 @@ public class User {
     private String password;
     private String role;
 
-    // GETTERS & SETTERS
+    // 🔥 RELATION: User → Subjects
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subject> subjects;
+
+    // ================= GETTERS & SETTERS =================
 
     public Long getId() {
         return id;
@@ -46,5 +51,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 }
